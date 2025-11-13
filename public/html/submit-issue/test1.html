@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="module">
+    console.log(document.querySelector('#f_insert'));
+
+    const f_insert = document.querySelector('#f_insert');
+    const mem_id = document.querySelector('#mem_id').value;
+    // 아래 코드는 실행기회를 갖더라도 최초에는 값이 들어있지 않다.
+    // const mem_email = document.querySelector('#mem_email').value;
+    let mem_email = document.querySelector('#mem_email').value;
+
+    console.log(`submit이전 mem_id : ${mem_id}, mem_email : ${mem_email}`);
+    
+    f_insert.addEventListener('submit', function(){
+      console.log(`submit했을 때 mem_id : ${mem_id}`);
+    })
+    
+    // ------------------------------------------------------------//
+
+    const f_update = document.querySelector('#f_update');
+
+    f_update.addEventListener('submit', function(event){
+      // event.preventDefault(); // 이벤트 전이를 막아줌
+      // 새로 입력값 읽어오기
+      mem_email = document.querySelector('#mem_email').value;
+      console.log(`submit했을 때 mem_id : ${mem_id}`);
+      console.log(`submit했을 때 mem_email : ${mem_email}`);
+    })
+
+  </script>
+  <!-- submit 발생하지 않음 -->
+  <form id="f_insert" method="get">
+    <input type="text" id="mem_id" name="mem_id" value="kiwi"><br>
+    <input type="button" value="아이디 전송"><br>
+  </form>
+  <hr>
+  <form id="f_update" method="get" action="testSubmit.html">
+    <input type="text" id="mem_email" name="mem_email"><br>
+    <button type="submit">이메일 전송</button><br>
+  </form>
+</body>
+</html>

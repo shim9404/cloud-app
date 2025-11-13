@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <%-include("include/header.ejs") %>
+      <!-- 변하는 부분이라 pageName 변수 사용 -->
+      <%-include(pageName) %>
+      <%-include("include/footer.ejs") %>
+    </div>
+    <script type="module">
+      const email = window.localStorage.getItem('email');
+      if(email)
+      { 
+        const myEmail = document.querySelector("#myEmail");
+        myEmail.querySelector('a').textContent = email;
+        myEmail.style.display = 'block';
+
+        document.querySelector('#login').style.display = 'none';
+        
+        document.querySelector('#logout').style.display = 'block';
+        document.querySelector('#cart').style.display = 'block';
+        document.querySelector('#mypage').style.display = 'block';
+      }
+      else //로그인을 하지 않았거나, 로그아웃을 했을 때
+      {
+        document.querySelector('#cart').style.display = 'none';
+        document.querySelector('#mypage').style.display = 'none';
+      }
+    </script>
+  </body>
+</html>

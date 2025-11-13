@@ -1,0 +1,30 @@
+<div class="row my-5">
+    <div class="col">
+        <h1 class="text-center mb-5">My Page</h1>
+        <div id="dmypage">
+          <!-- handlebars 템플릿 삽입되는 위치 -->
+        </div>
+        <div class="text-center my-3">
+            <a href="/users/memberUpdate">
+                <button class="btn btn-primary px-5">정보수정</button>
+            </a>
+        </div>      
+    </div>
+</div>
+
+  <!--마이페이지 템플릿-->
+<script id="temp_mypage" type="text/x-handlebars-template">
+    <div class="card">
+        <div class="row p-3">
+            <div class="col-md-4 col-lg-5 text-center">
+                <img src="{{photo}}" style="width:60%;border-radius:50%;" />
+            </div>
+            <div class="col mt-3">
+                <h5>이름: {{name}}</h5>
+                <hr />
+                <div class="my-3">주소: {{address}}</div>
+                <div class="my-3">전화: {{phone}}</div>
+            </div>
+        </div>
+    </div>
+</script>

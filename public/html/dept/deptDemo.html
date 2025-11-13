@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>deptList.html</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+</head>
+
+<body>
+  <!-- 
+  화면과 데이터가 만나는 부분을 어떻게 처리하나요?
+  
+  - handlebars사용 이유
+  반복되는 코드를 줄여주는 템플릿 형태 사용
+  -->
+  <script id="hb-dept" type="text/x-handlebars-template">
+    <ul>
+      {{#each depts}}
+        <li>{{deptno}},{{dname}},{{loc}}</li>
+      {{/each}}
+    </ul>
+  </script>
+  <div class="dept">핸들바스 템플릿 삽입 위치</div>
+  <script type="text/javascript">
+    // 데이터셋 정의
+    const data = {  // 객체부분
+      depts: [ // 배열 부분
+        { deptno: 10, dname: "개발1팀", loc: "서울" }, // 객체
+        { deptno: 20, dname: "운영팀", loc: "제주" },
+        { deptno: 30, dname: "품질관리팀", loc: "세종" }
+      ]
+    }//end of data
+    // handlebars 템플릿 가져오기
+    const source = document.querySelector("#hb-dept").innerHTML;
+    // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
+    const template = Handlebars.compile(source);
+    // 데이터와 html 렌더링
+    const html = template(data);
+    // 결과 출력
+    document.querySelector('.dept').innerHTML = html;
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/images/man4.png" alt="Avatar Logo" style="width: 40px" class="rounded-pill" />
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <!-- 캘린더 -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 카렌더 </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/calendar/calendar1">일정버전1</a></li>
+            <li><a class="dropdown-item" href="/calendar/calendar2">일정버전2</a></li>
+            <li><a class="dropdown-item" href="/calendar/calendar3">일정버전3</a></li>
+          </ul>
+        </li>
+        <!-- 게시판 -->
+        <li class="nav-item">
+          <a class="nav-link" href="#">게시판</a>
+        </li>
+        <!-- 유튜브 -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> 유튜브 </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/youtube/youtube1">인기동영상</a></li>
+            <li><a class="dropdown-item" href="/youtube/youtube2">동영상 검색</a></li>
+            <li><a class="dropdown-item" href="/youtube/youtube3">쇼츠 검색</a></li>
+          </ul>
+        </li>
+        <!-- 장바구니 : 최초에는 보이지 않으나, 로그인하면 보여야함 -->
+        <li class="nav-item" id="cart" style="display: none;">
+          <a class="nav-link" href="#">장바구니</a>
+        </li>
+        <!-- 마이페이지 : 최초에는 보이지 않으나, 로그인하면 보여야함 -->
+        <li class="nav-item" id="mypage" style="display: none;">
+          <a class="nav-link" href="/users/mypage">마이페이지</a>
+        </li>
+      </ul>
+      <!-- 로그인, 로그아웃, 로그인한 이메일주소 -->
+      <div class="d-flex">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li id="login" class="nav-item">
+            <a class="nav-link" href="/login" >로그인</a>
+          </li>
+          <li id="myEmail" style="display: none;">
+            <a class="nav-link active" href="#" >로그인한 이메일 주소</a>
+          </li>
+          <li id="logout" class="nav-item" style="display: none;">
+            <a class="nav-link" href="javascript:logout()">로그아웃</a>
+          </li>
+        </ul>
+      </div>
+      <!-- 로그인, 로그아웃, 로그인한 이메일주소 -->
+    </div>
+  </div>
+</nav>
+<script type="module">
+  const logout = document.querySelector("#logout");
+
+  logout.addEventListener('click', function(){
+    console.log('로그아웃 호출 성공');
+
+    window.localStorage.removeItem("uid")
+    window.localStorage.removeItem("email")
+
+    location.href = '/login';
+  })
+
+</script>

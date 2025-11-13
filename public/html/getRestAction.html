@@ -1,0 +1,7 @@
+<script>
+  // 이 파일의 확장자는 html이지만 이 실습에서 역할은 백엔드이다.
+  // console.log();
+  // const paramsString = "email=kiwi@hot.com&password=12345678";
+  let searchParams = new URLSearchParams(window.location.search);
+  console.log(`email: ${searchParams.get("email")}, password:${searchParams.get("password")}`);
+</script>

@@ -1,0 +1,17 @@
+{
+  "name": "basic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "show-graph": "madge --image graph.png main.mjs",
+    "start": "serve ./"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "madge": "^8.0.0",
+    "serve": "^14.2.5"
+  }
+}

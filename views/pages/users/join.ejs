@@ -1,0 +1,65 @@
+<div class="row my-5 justify-content-center">
+  <div class="col-8 col-md-6 col-lg-4">
+    <h3 class="text-center mb-5">회원가입</h3>
+    <form id="join" name="frm" method="post">
+      <div class="input-group my-2">
+        <div class="input-group-text">이 메 일</div>
+        <input class="form-control" id="join-email" name="email" value="tomato@hot.com" />
+      </div>
+      <div class="input-group">
+        <div class="input-group-text">비밀번호</div>
+        <input
+          id="join-password"
+          class="form-control"
+          name="password"
+          type="password"
+          value="12345678"
+        />
+      </div>
+      <div class="my-3">
+        <button type="submit" class="btn btn-success w-100">회원가입</button>
+      </div>
+      <div class="text-end mt-3">
+        <a href="/login">로그인</a>
+      </div>
+    </form>
+  </div>
+</div>
+<script type="module">
+  import { app } from '/javascripts/firebase.js'
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+  const join = document.querySelector('#join');
+
+  join.addEventListener('submit',function(event){
+    // 이벤트 전이 방지
+    // 없으면 화면이 새로고침이 일어남
+    event.preventDefault();
+
+    const auth = getAuth(app);
+    const u_email = document.querySelector('#join-email').value;
+    const u_pw = document.querySelector('#join-password').value;
+    console.log(`u_email:${u_email}, u_pw:${u_pw}`);
+    createUserWithEmailAndPassword(auth, u_email, u_pw)
+      .then((response) => { // 요청에 대한 응답이 오면 파라미터(data)에 사용자 정보가 담김
+        const user = response.user;
+        // 회원가입 성공하면 함수에 함수의 파라미터에 인증객체와 이메일, 비번을 비교해서 일치하면 응답으로 메시지를 주입해 준다는 것이 콜백 함수     
+        if (user.uid) // 참이면 구글에서 응답으로 보내준 uid값이 있다.
+        {
+          // location.href='/login';
+        }
+        else
+        {
+          console.log("회원가입 실패");
+        }
+      })
+      .catch((error) => { // error가 발생하면 그 때 실행이 됨.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        
+        console.log(`Join Error code: ${errorCode} Msg:${errorMessage}`);
+      });
+  });
+
+  
+</script>

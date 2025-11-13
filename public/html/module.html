@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- <script type="text/javascript">// commonjs  -->
+    <!-- type이 module 이면 defer를 붙이지 않더라도 로딩(DOM Tree가 그려짐)이 된 다음에 Script가 호출된다. -->
+  <script type="module">// ESM
+    const root = document.querySelector("#root");
+    root.innerText = "<h1>삽입</h1>"
+  </script>
+  <div id="root"></div>
+</body>
+</html>

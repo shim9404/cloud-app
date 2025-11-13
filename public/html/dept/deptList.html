@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>deptList.html</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+</head>
+
+<body>
+  <script id="hb-dept" type="text/x-handlebars-template">
+    <table border="1">
+      <!-- 
+      header area start 
+      이 구간은 for문에 포함시키지 않음
+      -->
+      <thead>
+        <tr>
+          <!-- th는 td와 동일하지만, 중앙정렬인 것이 차이점이 있다. -->
+          <th>부서번호</th> 
+          <th>부서명</th>
+          <th>지역</th>
+        </tr>
+      </thead>
+      <!-- header area end -->
+      <!-- 데이터에 따라서 바뀌므로 유연해야 함 -->
+      <tbody>
+        <!-- handlebas에서 제공하는 문법 for문의 역할을 함 -->
+        {{#each depts}}
+        <tr>
+          <td>{{deptno}}</td>
+          <td>{{dname}}</td>
+          <td>{{loc}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </script>
+  <div class="dept">핸들바스 템플릿 삽입 위치</div>
+  <script type="text/javascript">
+    // 데이터셋 정의
+    const data = {  // 객체부분
+      depts: [ // 배열 부분
+        { deptno: 10, dname: "개발1팀", loc: "서울" }, // 객체
+        { deptno: 20, dname: "운영팀", loc: "제주" },
+        { deptno: 30, dname: "품질관리팀", loc: "세종" }
+      ]
+    }//end of data
+    // handlebars 템플릿 가져오기
+    const source = document.querySelector("#hb-dept").innerHTML;
+    // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
+    const template = Handlebars.compile(source);
+    // 데이터와 html 렌더링
+    const html = template(data);
+    // 결과 출력
+    document.querySelector('.dept').innerHTML = html;
+  </script>
+</body>
+
+</html>

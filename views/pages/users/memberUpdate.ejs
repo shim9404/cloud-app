@@ -2,18 +2,18 @@
   <div class="col">
     <h1 class="text-center mb-5">회원정보수정</h1>
     <div class="card p-5">
-      <form name="frm" method="post">
+      <form id="f_update" name="frm" method="post">
         <div class="input-group my-2">
           <div class="input-group-text px-5">성명</div>
-          <input class="form-control" name="name" value="나잘난" />
+          <input id="name" class="form-control" name="name" value="나잘난" />
         </div>
         <div class="input-group my-2">
           <div class="input-group-text px-5">주소</div>
-          <input class="form-control" name="address" value="서울특별시 금천구 가산디지털2로" />
+          <input id="address" class="form-control" name="address" value="서울특별시 금천구 가산디지털2로" />
         </div>
         <div class="input-group my-2">
           <div class="input-group-text px-5">전화</div>
-          <input class="form-control" name="phone" value="010-1010-2020" />
+          <input id="phone" class="form-control" name="phone" value="010-1010-2020" />
         </div>
         <div>
           <img id="fileName" src="https://placehold.co/200x200" width="30%" />
@@ -26,3 +26,88 @@
     </div>
   </div>
 </div>
+<script type="module">
+  import { app } from '/javascripts/firebase.js'
+  import { getFirestore, setDoc, doc, collection, getDoc } from 'https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js';
+  import ImageUploader from '/javascripts/image_upload.js';
+
+  const db = getFirestore(app);
+  const imageUploader = new ImageUploader();
+  const fileInput = document.querySelector('#file');
+  const fileName = document.querySelector('#fileName');
+  const nameInput = document.querySelector('#name');
+  const addressInput = document.querySelector('#address');
+  const phoneInput = document.querySelector('#phone');
+
+  // 수정하기 화면을 열때 Firestore에 접속하여 사용자 정보를 가져와서 화면에 출력하기
+  // login.ejs에서 로그인을 성공하면 firebase에서 응답으로 보내준 Data에서 꺼낸 값을 브라우저의 localStorage에 저장해둠
+  const uid = window.localStorage.getItem('uid');
+  const snapshot = await getDoc(doc(db, `users/${uid}`));
+  if (snapshot.data)
+  {
+    const user = snapshot.data();
+    console.log(user);
+    console.log(`${user.name}, ${user.phone}, ${user.address}, ${user.photo}`);
+    if (user.photo)
+    {
+      fileName.src = user.photo;
+    }
+
+    nameInput.value = user.name;
+    addressInput.value = user.address;
+    phoneInput.value = user.phone;
+  }
+
+  // form 전송 이벤트 처리
+  const f_update = document.querySelector('#f_update');
+  f_update.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if (window.confirm("변경 사항을 적용하시겠습니까?"))
+    {
+      const name = nameInput.value;
+      const address = addressInput.value;
+      const phone = phoneInput.value;
+      // 이미지 선택 확인
+      if (fileInput.files[0]){ // 파일명
+        const file = fileInput.files[0];
+        // cloudinary에 upload //
+        const result = await imageUploader.upload(file);
+        console.log(result);
+        // 이미지 이름 - result.original_filename
+        // 클라우드 이미지 url - result.secure_url
+        fileName.src = result.secure_url;
+        await setDoc(doc(db, `users/${uid}`), {
+          name : name,
+          address : address,
+          phone : phone,
+          photo : result.secure_url
+        })
+        alert("사용자 정보가 변경되었습니다.")
+      }
+      else
+      {
+        alert("이미지가 비었습니다.")  
+      }
+       // end of imageFile if
+
+    }// end of modify confirm if
+  })
+
+  // 이미지 파일 선택/ 업로드
+  fileInput.addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if (file)
+    {
+      const reader = new FileReader();
+      // 파일 읽기가 완료되면 실행될 이벤트 핸들러 
+      reader.onload = function(e){
+        // 미리보기 이미지 업데이트
+        fileName.src = e.target.result;
+      } // end of onload event
+      // 파일을 Data URL로 읽기
+      
+      reader.readAsDataURL(file);
+    }
+  }) // end of change event handler
+
+</script>

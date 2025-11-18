@@ -1,10 +1,10 @@
 <!-- <h4>도서 조건 검색 및 목록 보기</h4> --> 
 <div class="row mt-5 justify-content-end">
   <div class="col-6 col-md-4">
-    <form name="frm">
+    <form id="f_title" name="frm">
       <div class="input-group">
-        <input id="input-search" type="text" name="query" class="form-control" value="자바" />
-        <button id="btn-submit" class="btn btn-success" type="submit">검색</button>
+        <input id="query" type="text" name="query" class="form-control" value="자바" />
+        <button class="btn btn-success" type="submit">검색</button>
       </div>
     </form>
   </div>
@@ -12,9 +12,7 @@
 <hr />
 
 <!-- 검색 결과 출력 영역 -->
-<div class="row" id="list_book">
-  
-</div>
+<div class="row" id="list_book"></div>
 
 <!-- Handlebars 템플릿 -->
 <script type="text/x-handlebars-template" id="temp-book">
@@ -22,7 +20,7 @@
     <div class="col-6 col-md-4 col-lg-2">
       <div class="card my-2">
         <div class="card-body text-center">
-          <img src="{{image thumbnail}}" index="{{@index}}" alt="도서이미지" style="cursor:pointer; width:80%" />
+          <img class="book-image" src="{{image thumbnail}}" index="{{@index}}" alt="도서이미지" style="cursor:pointer; width:80%" />
           <div class="ellipsis mt-2">{{title}}</div>
         </div>
         <div class="card-footer text-center" style="font-size:0.9rem;">
@@ -30,6 +28,7 @@
           <span class="cart ms-3" book="{{book @this}}" style="cursor:pointer; color:green;">CART</span>
         </div>
       </div>
+      <%-include("bookModal.ejs") %>
     </div>
   {{/each}}
 </script>
@@ -46,14 +45,56 @@
   });
 </script>
 <script type="module">
-  
+  // Handlebars가 documents의 한개 요소를 카드 레이아웃 하나+ 모달 하나를 가지도록 설계함
+  // 왜? 카드 이미지를 클릭 -> index/book data를 이용해서 모달을 열어주기 위함임.
+  // 모달 내용은 bookModal.ejs에 있다.
+  // 이미지는 index="{{@index}}"를 넣어서 몇번째 책인지를 알 수 있다.
+  // 장바구니 이벤트와 이미지 클릭 시 상세 보기 모달을 띄워서 상세내용을 확인하고 장바구니 담기 버튼을 누른다.
+  // 두가지를 같이 처리할 수 있도록 이벤트 핸들러 함수를 설계해본다.
+  const listEl = document.querySelector("#list_book");
+  // 목록 영역 클릭 이벤트(장바구니 & 이미지 모달 처리)
+  listEl.addEventListener('click', function(evnet){
+    const target = evnet.target;
+    // CART 클릭
+    if (target.classList.contains('cart'))
+    {
+      console.log('카트 클릭');
+    }
+
+    // image 클릭
+    // id, class 둘다 없을때 tagName이용 : 대문자로 비교해야함
+    if (target.tagName == 'IMG')
+    {
+      const index = target.getAttribute('index'); // 0,1,2,,,9
+      console.log(`index:${index}`);
+      const modalEl = document.querySelector(`#modal${index}`);
+      if (modalEl && window.bootstrap){
+        // index.ejs에 bootstrap객체가 import되어 있으므로 사용이 가능함
+        // bootstrap이 제공하는 Modal객체를 생성하고 그 객체가 제공하는 show()를 호출하며 화면에 모달이 출력되게 한다.
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+      }
+    }
+  })
+
+  // 검색 전에도 디폴트 페이지 출력되도록 query는 null이나 undefined가 되지 않도록 할 것.
+  let query = document.querySelector('#query').value; // '자바'
+  let page = 0;
+
+  document.querySelector('#f_title').addEventListener('submit',function(e) {
+    e.preventDefault();
+    query = document.querySelector('#query').value;
+    page = 0;
+    getBookList(query);
+  })
+
   // 도서 리스트 조회
-  function getBookList(title){
+  function getBookList(query, page=0){
     const url = new URL('https://dapi.kakao.com/v3/search/book');
 
-    url.searchParams.set('query',title);
     url.searchParams.set('target', 'title');
-    url.searchParams.set('page', 1);
+    url.searchParams.set('query',query);
+    url.searchParams.set('page', page);
     
     fetch(url, {
       headers: {
@@ -74,12 +115,7 @@
       })
       .catch((error) => console.error(error));
   } // end of getBookList
-
-  const inputSearch = document.querySelector('#input-search');
-  const click = document.querySelector('#btn-submit');
-  click.addEventListener('click',function(e) {
-    e.preventDefault();
-    getBookList(inputSearch.value);
-  })
-
+  
+  // 최초 1회 실행
+  getBookList(query, 1);
 </script>

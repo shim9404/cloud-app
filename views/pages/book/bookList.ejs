@@ -1,0 +1,85 @@
+<!-- <h4>도서 조건 검색 및 목록 보기</h4> --> 
+<div class="row mt-5 justify-content-end">
+  <div class="col-6 col-md-4">
+    <form name="frm">
+      <div class="input-group">
+        <input id="input-search" type="text" name="query" class="form-control" value="자바" />
+        <button id="btn-submit" class="btn btn-success" type="submit">검색</button>
+      </div>
+    </form>
+  </div>
+</div>
+<hr />
+
+<!-- 검색 결과 출력 영역 -->
+<div class="row" id="list_book">
+  
+</div>
+
+<!-- Handlebars 템플릿 -->
+<script type="text/x-handlebars-template" id="temp-book">
+  {{#each documents}}
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="card my-2">
+        <div class="card-body text-center">
+          <img src="{{image thumbnail}}" index="{{@index}}" alt="도서이미지" style="cursor:pointer; width:80%" />
+          <div class="ellipsis mt-2">{{title}}</div>
+        </div>
+        <div class="card-footer text-center" style="font-size:0.9rem;">
+          {{format price}}
+          <span class="cart ms-3" book="{{book @this}}" style="cursor:pointer; color:green;">CART</span>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</script>
+<!-- Handlebars 헬퍼 등록 -->
+<script>
+  Handlebars.registerHelper("image", function(thum) {
+    return thum || "https://placehold.co/120x174";
+  });
+  Handlebars.registerHelper("format", function(price) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원';
+  });
+  Handlebars.registerHelper("book", function(book) {
+    return JSON.stringify(book);
+  });
+</script>
+<script type="module">
+  
+  // 도서 리스트 조회
+  function getBookList(title){
+    const url = new URL('https://dapi.kakao.com/v3/search/book');
+
+    url.searchParams.set('query',title);
+    url.searchParams.set('target', 'title');
+    url.searchParams.set('page', 1);
+    
+    fetch(url, {
+      headers: {
+        'Authorization':'KakaoAK eacbccd309697fe3ece8318f1379d22f'
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        // handlebars 템플릿 가져오기
+        const source = document.querySelector("#temp-book").innerHTML;
+        // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
+        const template = Handlebars.compile(source);
+        // 데이터와 html 렌더링
+        const html = template(data);
+        document.querySelector('#list_book').innerHTML = html;
+      })
+      .catch((error) => console.error(error));
+  } // end of getBookList
+
+  const inputSearch = document.querySelector('#input-search');
+  const click = document.querySelector('#btn-submit');
+  click.addEventListener('click',function(e) {
+    e.preventDefault();
+    getBookList(inputSearch.value);
+  })
+
+</script>

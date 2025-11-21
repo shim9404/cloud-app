@@ -39,6 +39,23 @@
   </script>
   <div class="dept">핸들바스 템플릿 삽입 위치</div>
   <script type="text/javascript">
+
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:3000/dept", requestOptions)
+      .then((response) => response.json())
+      .then((result) => 
+      {
+        console.log(result);
+
+
+      })
+      .catch((error) => console.error(error));
+
+
     // 데이터셋 정의
     const data = {  // 객체부분
       depts: [ // 배열 부분
@@ -48,7 +65,7 @@
         { deptno: 50, dname: "개발2팀", loc: "송도" },
       ]
     }//end of data
-    // handlebars 템플릿 가져오기
+
     const source = document.querySelector("#hb-dept").innerHTML;
     // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
     const template = Handlebars.compile(source);
@@ -56,6 +73,8 @@
     const html = template(data);
     // 결과 출력
     document.querySelector('.dept').innerHTML = html;
+    // handlebars 템플릿 가져오기
+  
   </script>
 </body>
 

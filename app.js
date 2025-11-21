@@ -101,8 +101,8 @@ app.get('/dept', async (req, res) => {
 
     const result = await connection.execute(
       `SELECT deptno as "deptno", dname as "dname", loc as "loc"
-         FROM dept
-         ORDER BY deptno`,
+        FROM dept
+        ORDER BY deptno`,
       [], // 바인드 변수 없으면 빈 배열
       {
         outFormat: oracledb.OUT_FORMAT_OBJECT // 컬럼 이름으로 JSON 받기

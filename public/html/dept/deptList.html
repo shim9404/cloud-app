@@ -27,7 +27,7 @@
       <!-- 데이터에 따라서 바뀌므로 유연해야 함 -->
       <tbody>
         <!-- handlebas에서 제공하는 문법 for문의 역할을 함 -->
-        {{#each depts}}
+        {{#each data}}
         <tr>
           <td>{{deptno}}</td>
           <td>{{dname}}</td>
@@ -52,6 +52,15 @@
         console.log(result);
 
 
+        const source = document.querySelector("#hb-dept").innerHTML;
+        // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
+        const template = Handlebars.compile(source);
+        // 데이터와 html 렌더링
+        const html = template(result);
+        // 결과 출력
+        document.querySelector('.dept').innerHTML = html;
+        // handlebars 템플릿 가져오기
+
       })
       .catch((error) => console.error(error));
 
@@ -66,14 +75,7 @@
       ]
     }//end of data
 
-    const source = document.querySelector("#hb-dept").innerHTML;
-    // 템플릿 컴파일(= 매핑) 데이터와 테이블 태그를 매핑 시킴
-    const template = Handlebars.compile(source);
-    // 데이터와 html 렌더링
-    const html = template(data);
-    // 결과 출력
-    document.querySelector('.dept').innerHTML = html;
-    // handlebars 템플릿 가져오기
+   
   
   </script>
 </body>
